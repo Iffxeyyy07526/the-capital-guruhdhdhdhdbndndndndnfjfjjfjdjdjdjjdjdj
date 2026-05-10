@@ -1,47 +1,69 @@
-import { LegalPageLayout } from "@/components/LegalPageLayout";
-
 export default function TermsPage() {
   return (
-    <LegalPageLayout title="Terms and Conditions" lastUpdated="January 1, 2024">
-      <div className="space-y-6 text-gray-300 leading-relaxed">
-        <h2 className="text-2xl font-bold text-white mt-8 mb-4">1. Acceptance of Terms</h2>
-        <p>
-          By accessing and using The Capital Guru (the "Website") and our Telegram channels, you accept and agree to be bound by the terms and provision of this agreement.
-        </p>
+    <div className="py-24 bg-brand-dark min-h-screen relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gold-600/5 blur-[120px] pointer-events-none rounded-full" />
+      <div className="container mx-auto px-4 max-w-4xl relative z-10">
+        <h1 className="font-display text-4xl font-bold mb-8 text-gold-500 tracking-tight">Terms & Conditions / User Agreement</h1>
+        <div className="text-white/70 space-y-8 font-light prose prose-invert max-w-none">
+          <p className="text-lg">Last updated: {new Date().toLocaleDateString()}</p>
+          <p>
+            By accessing or using The Capital Guru (thecapitalguru.net) services, dashboard, and associated Telegram channels, you enter into a legally binding agreement to comply with the terms listed below. Please read these terms carefully before proceeding.
+          </p>
+          
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white tracking-tight border-b border-white/10 pb-2">1. Subscription Characteristics</h2>
+            <p>
+              Access to our exclusive Telegram signals and premium content is provided on a subscription basis. We reserve the absolute right to manually verify any payment via UTR number before granting access. Subscriptions cannot be transferred.
+            </p>
+          </section>
 
-        <h2 className="text-2xl font-bold text-white mt-8 mb-4">2. Services Description</h2>
-        <p>
-          The Capital Guru provides educational content, market analysis, and trading signals primarily focused on the Indian Stock Market (Nifty, BankNifty, options, and cash market). All information is for educational purposes only.
-        </p>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white tracking-tight border-b border-white/10 pb-2">2. Refunds and Cancellations</h2>
+            <p>
+              Due to the digital and immediate nature of our intellectual property and market signals, <strong>all payments are strictly final and non-refundable</strong> once a subscription is activated and access is granted. No prorated refunds will be issued for partial usage or early cancellations.
+            </p>
+          </section>
 
-        <h2 className="text-2xl font-bold text-white mt-8 mb-4">3. Subscription and Payments</h2>
-        <ul className="list-disc pl-6 space-y-2">
-          <li>All subscription fees are non-refundable once paid and access is granted.</li>
-          <li>Payments are collected securely through UPI. Users must verify the correct merchant UPI before initiating a transaction.</li>
-          <li>We reserve the right to change our subscription fees upon reasonable notice.</li>
-          <li>Access to premium Telegram channels is strictly tied to your active subscription status.</li>
-        </ul>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white tracking-tight border-b border-white/10 pb-2">3. Risk Warning & No Guarantee of Profits</h2>
+            <p>
+              The Capital Guru serves as an educational and informational platform. We are not a registered investment advisor. The financial signals provided represent our own analysis and opinions. Financial market trading, particularly in derivatives (F&O), involves an exceptionally high degree of risk.
+            </p>
+            <p>
+              <strong>We do not guarantee any specific returns, profits, or freedom from capital loss.</strong> You are solely responsible for executing any trades, and for the consequences of those trades.
+            </p>
+          </section>
 
-        <h2 className="text-2xl font-bold text-white mt-8 mb-4">4. No Investment Advice / Risk Acknowledgment</h2>
-        <p>
-          The content provided by The Capital Guru does not constitute financial, investment, or trading advice. Trading in the stock market, especially derivatives (F&O), involves substantial risk of loss and is not suitable for every investor. You are solely responsible for your trading decisions.
-        </p>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white tracking-tight border-b border-white/10 pb-2">4. Intellectual Property Rights (IPR)</h2>
+            <p>
+              All materials, inclusive of but not limited to trade signals, analytical reports, charts, website content, and dashboard designs, are the intellectual property of The Capital Guru.
+            </p>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Reproduction, forwarding, scraping, or reselling of our signals or materials is strictly prohibited.</li>
+              <li>Violation of this rule will lead to instant termination of the subscription, IP bans, and potential legal action.</li>
+            </ul>
+          </section>
 
-        <h2 className="text-2xl font-bold text-white mt-8 mb-4">5. User Conduct</h2>
-        <p>
-          You agree not to reproduce, duplicate, copy, sell, resell, or exploit any portion of the Service, use of the Service, or access to the Service without express written permission by us. Forwarding our trading signals or premium content to non-members is strictly prohibited and will result in an immediate ban without a refund.
-        </p>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white tracking-tight border-b border-white/10 pb-2">5. Platform Independence</h2>
+            <p>
+              We distribute our services primarily via Telegram. We are an independent entity and are not affiliated, endorsed, or sponsored by Telegram, TradingView, SEBI (unless explicitly listed), or any specific brokerage.
+            </p>
+          </section>
 
-        <h2 className="text-2xl font-bold text-white mt-8 mb-4">6. Limitation of Liability</h2>
-        <p>
-          In no event shall The Capital Guru, its directors, employees, or agents be liable for any direct, indirect, incidental, special, or consequential damages arising out of your use of or inability to use the service.
-        </p>
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white tracking-tight border-b border-white/10 pb-2">6. Discontinuation of Services</h2>
+            <p>
+              We reserve the right to modify, suspend, or discontinue any aspect of our services at our sole discretion with or without notice. In event of a permanent shutdown initiated by us, ongoing subsciptions may be compensated at our discretion.
+            </p>
+          </section>
 
-        <h2 className="text-2xl font-bold text-white mt-8 mb-4">7. Changes to Terms</h2>
-        <p>
-          We reserve the right, at our sole discretion, to modify or replace these Terms at any time. Continued use of the platform constitutes your acceptance of the new terms.
-        </p>
+          <p className="pt-8 border-t border-white/10 text-sm text-white/50">
+            For further queries or clarifications regarding our terms, please contact mahir@thecapitalguru.net.
+          </p>
+        </div>
       </div>
-    </LegalPageLayout>
+    </div>
   );
 }

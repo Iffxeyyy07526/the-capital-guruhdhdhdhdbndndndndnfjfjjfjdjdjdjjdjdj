@@ -1,27 +1,33 @@
-import "./globals.css";
-import { Inter, Space_Grotesk } from "next/font/google";
-import { PageTransition } from "@/components/PageTransition";
-import { LoadingProvider } from "@/components/LoadingProvider";
+import type {Metadata} from 'next';
+import { Inter, Space_Grotesk } from 'next/font/google';
+import './globals.css';
+import { Toaster } from 'sonner';
+import { Navbar } from '@/components/navbar';
+import { Footer } from '@/components/footer';
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const space = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
 
-export const metadata = {
-  title: "The Capital Guru - Premium Trading Signals",
-  description: "Master the Markets with Precision.",
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-display',
+});
+
+export const metadata: Metadata = {
+  title: 'The Capital Guru - Premium Trading Signals',
+  description: 'Premium trading signals for the Indian market (NSE/BSE futures and options).',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="en" className={`${inter.variable} ${space.variable} dark`}>
-      <body className="antialiased min-h-screen flex flex-col font-inter bg-black text-white selection:bg-emerald-500/30 overflow-x-hidden">
-        <LoadingProvider>
-          <PageTransition>{children}</PageTransition>
-        </LoadingProvider>
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} dark`}>
+      <body className="bg-brand-black text-white min-h-screen flex flex-col font-sans" suppressHydrationWarning>
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
+        <Toaster theme="dark" richColors position="top-right" />
       </body>
     </html>
   );

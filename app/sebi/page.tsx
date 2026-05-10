@@ -1,53 +1,46 @@
-import { LegalPageLayout } from "@/components/LegalPageLayout";
-
 export default function SebiGuidelinesPage() {
   return (
-    <LegalPageLayout title="SEBI Guidelines & Disclosures" lastUpdated="January 1, 2024">
-      <div className="space-y-6 text-gray-300 leading-relaxed">
-        
-        <div className="p-6 bg-red-500/10 border border-red-500/30 rounded-2xl mb-8">
-          <h2 className="text-xl font-bold text-red-400 mb-2">Important SEBI Disclosure</h2>
-          <p className="text-white">
-            <strong>The Capital Guru is NOT an SEBI registered investment advisor or research analyst.</strong>
-          </p>
-          <p className="mt-2 text-sm text-gray-300">
-            All the views and information shared on this website, associated Telegram channels, WhatsApp, or any other medium are strictly for educational and sharing purposes only. 
-          </p>
+    <div className="py-24 bg-brand-dark min-h-screen relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-red-600/5 blur-[120px] pointer-events-none rounded-full" />
+      <div className="container mx-auto px-4 max-w-4xl relative z-10">
+        <h1 className="font-display text-4xl font-bold mb-8 text-white tracking-tight">SEBI Guidelines & Risk Disclosure</h1>
+        <div className="text-white/70 space-y-8 font-light prose prose-invert max-w-none">
+          <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-2xl text-white/90">
+            <h2 className="text-xl font-bold text-red-400 mb-4 tracking-tight">Mandatory SEBI Risk Disclosure</h2>
+            <p className="text-sm font-medium mb-3 text-white/50">(As per SEBI Circular no. SEBI/HO/MIRSD/MIRSD-PoD-1/P/CIR/2023/71)</p>
+            <ul className="list-disc pl-5 mt-3 space-y-2 font-medium">
+              <li>9 out of 10 individual traders in equity Futures and Options Segment, incur net losses.</li>
+              <li>On an average, loss makers register net trading loss close to ₹ 50,000.</li>
+              <li>Over and above the net trading losses incurred, loss makers expend an additional 28% of net trading losses as transaction costs.</li>
+              <li>Those making net trading profits, incur between 15% to 50% of such profits as transaction cost.</li>
+            </ul>
+          </div>
+          
+          <section className="space-y-4 pt-4">
+            <h2 className="text-2xl font-bold text-white tracking-tight border-b border-white/10 pb-2">Registration Status & Intent</h2>
+            <p>
+              The Capital Guru serves as an educational research initiative. The information hosted here, including charts, technical structures, analytical breakdowns, and our Telegram updates, is designed strictly for educational and self-learning purposes.
+            </p>
+            <p className="font-medium text-gold-400">
+              We are NOT a SEBI Registered Investment Advisor (RIA) or Research Analyst. The platform operators are currently pursuing the required certifications, but until officially certified by SEBI, no content should be considered specific financial advice.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white tracking-tight border-b border-white/10 pb-2">Derivative Trading Risks</h2>
+            <p>
+              Trading in the Indian Futures and Options (F&O) market involves a high degree of leverage. Leverage can act against you as well as for you, and the risk of complete capital destruction exists. It is possible to lose more than your initial margin in certain volatile scenarios.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl font-bold text-white tracking-tight border-b border-white/10 pb-2">Independent Decision Making</h2>
+            <p>
+              By accessing our dashboard or viewing our strategies, you acknowledge that you have read and understood this SEBI-mandated risk disclosure. Any financial commitments made in the indices or equity markets are your responsibility alone. Do your own research, and always consult a registered financial planner before exposing your portfolio to derivative risks.
+            </p>
+          </section>
         </div>
-
-        <h2 className="text-2xl font-bold text-white mt-8 mb-4">1. Regulatory Compliance</h2>
-        <p>
-          As per SEBI (Research Analysts) Regulations, 2014 and SEBI (Investment Advisers) Regulations, 2013, providing specific buy/sell/hold recommendations for financial consideration without being registered is prohibited. The Capital Guru operates strictly as an educational platform teaching chart patterns, price action, and market study. 
-        </p>
-
-        <h2 className="text-2xl font-bold text-white mt-8 mb-4">2. Nature of Guidance</h2>
-        <ul className="list-disc pl-6 space-y-2">
-          <li>We share our personal trades, view, and analysis for case studies so that members can learn the methodology.</li>
-          <li>We do NOT provide portfolio management services (PMS) or handle clients' funds in any capacity.</li>
-          <li>We do NOT promise fixed returns or guaranteed profits under any circumstances.</li>
-        </ul>
-
-        <h2 className="text-2xl font-bold text-white mt-8 mb-4">3. F&O Trading Risk Disclosure (SEBI Mandated)</h2>
-        <p>
-          As mandated by the Securities and Exchange Board of India (SEBI), all investors must be aware of the following statistics regarding Equity Derivatives (F&O) segment:
-        </p>
-        <ul className="list-disc pl-6 space-y-2 text-gray-400">
-          <li><strong>9 out of 10 individual traders</strong> in equity Futures and Options Segment incur net losses.</li>
-          <li>On average, loss makers register net trading loss close to <strong>₹50,000</strong>.</li>
-          <li>Over and above the net trading losses incurred, loss makers expend an additional <strong>28%</strong> of net trading losses as transaction costs.</li>
-          <li>Those making net trading profits incur between <strong>15% to 50%</strong> of such profits as transaction cost.</li>
-        </ul>
-
-        <h2 className="text-2xl font-bold text-white mt-8 mb-4">4. Conflict of Interest</h2>
-        <p>
-          The individuals running The Capital Guru may or may not hold positions in the stocks or instruments discussed. Our analysis is unbiased and based on technical metrics, but users should consider this potential conflict of interest.
-        </p>
-        
-        <p className="mt-8 text-sm text-gray-400 border-t border-white/10 pt-6">
-          By proceeding with any of our services, you acknowledge that you have read and understood these disclosures and accept that any trading decisions you make are completely your own responsibility.
-        </p>
-
       </div>
-    </LegalPageLayout>
+    </div>
   );
 }

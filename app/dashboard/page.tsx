@@ -1,146 +1,186 @@
-"use client"
+'use client';
 
-import { useEffect, useState } from "react"
-import { supabase } from "@/lib/supabase"
-import { useRouter } from "next/navigation"
-import { AppNavbar } from "@/components/AppNavbar"
-import { Lock, Crown, LogOut, ExternalLink } from "lucide-react"
-import { CheckoutButton } from "@/components/CheckoutButton"
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { ShieldAlert, CheckCircle2, Clock, Send, FileText, ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
 
-export default function Dashboard() {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [activePlan, setActivePlan] = useState<any>(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        router.push("/login");
-      } else {
-        setUser(session.user);
-        
-        // Fetch active payment
-        const { data: payments } = await supabase
-          .from("payments")
-          .select("*")
-          .eq("user_id", session.user.id)
-          .eq("status", "approved")
-          .gt("expires_at", new Date().toISOString())
-          .order("expires_at", { ascending: false })
-          .limit(1);
-
-        if (payments && payments.length > 0) {
-          setActivePlan(payments[0]);
-        }
-      }
-      setLoading(false);
-    };
-
-    checkUser();
-  }, [router]);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.push("/")
-    router.refresh()
-  }
-
-  if (loading) {
-    return (
-      <main className="flex min-h-screen flex-col bg-black text-white items-center justify-center">
-        <div className="w-8 h-8 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin"></div>
-      </main>
-    )
-  }
+function DashboardContent() {
+  const searchParams = useSearchParams();
+  const status = searchParams?.get('status') || 'active'; // 'pending' | 'active' | 'expired'
 
   return (
-    <main className="flex min-h-screen flex-col bg-black text-white">
-      <AppNavbar />
-      
-      <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12">
-        <div className="flex justify-between items-end mb-12">
-          <div>
-            <h1 className="text-4xl font-space font-bold mb-2">My Dashboard</h1>
-            <p className="text-gray-400">Welcome back, {user?.user_metadata?.full_name || user?.email}</p>
-          </div>
-          <button 
-            onClick={handleSignOut}
-            className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Sign Out
-          </button>
+    <>
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 relative z-10">
+        <div>
+          <h1 className="font-display text-4xl font-bold tracking-tight mb-2 text-white">Client Portal</h1>
+          <p className="text-white/50 font-light">Welcome back. Here is your account overview.</p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Subscription Status */}
-          <div className="bg-zinc-950 border border-white/10 rounded-3xl p-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[40px] -z-10 translate-x-1/3 -translate-y-1/3" />
-            
-            <div className="flex items-center gap-3 mb-6 relative z-10">
-              <div className="p-2 bg-emerald-500/10 rounded-xl">
-                <Crown className="w-6 h-6 text-emerald-400" />
-              </div>
-              <h2 className="text-xl font-bold">Subscription</h2>
-            </div>
-            
-            <div className="mb-6 relative z-10">
-              <p className="text-sm text-gray-400 mb-1">Current Plan</p>
-              <p className="text-2xl font-space font-bold text-white capitalize">{activePlan ? activePlan.plan_id : "Free Tier"}</p>
-              {activePlan && (
-                <p className="text-xs text-emerald-400 font-medium mt-1">
-                  Valid till: {new Date(activePlan.expires_at).toLocaleDateString()}
-                </p>
-              )}
-            </div>
-            
-            {!activePlan && (
-              <CheckoutButton 
-                priceId="monthly"
-                planName="Monthly"
-                className="w-full py-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl font-bold hover:bg-emerald-500/20 transition-colors relative z-10"
-              />
+        
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 bg-brand-black/80 backdrop-blur-md border border-white/5 px-5 py-3 rounded-[2rem] shadow-xl">
+            <span className="text-sm text-white/50 uppercase tracking-widest font-semibold text-[10px]">Status</span>
+            {status === 'pending' && (
+              <span className="inline-flex items-center gap-1.5 text-gold-500 text-sm font-medium">
+                <Clock className="w-4 h-4" /> Pending
+              </span>
+            )}
+            {status === 'active' && (
+              <span className="inline-flex items-center gap-1.5 text-green-500 text-sm font-medium">
+                <CheckCircle2 className="w-4 h-4" /> Active
+              </span>
+            )}
+            {status === 'expired' && (
+              <span className="inline-flex items-center gap-1.5 text-red-500 text-sm font-medium">
+                <ShieldAlert className="w-4 h-4" /> Expired
+              </span>
             )}
           </div>
+          <button
+            onClick={() => {
+              document.cookie = "isLoggedIn=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+              window.location.href = '/login';
+            }}
+            className="px-5 py-3 rounded-[2rem] border border-white/10 bg-white/5 font-medium text-white/70 hover:text-white hover:bg-white/10 transition-colors text-sm"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
 
-          {/* Telegram Invite */}
-          <div className="bg-zinc-950 border border-white/10 rounded-3xl p-8 relative overflow-hidden lg:col-span-2">
-            <div className={`absolute top-0 right-0 w-64 h-64 ${activePlan ? 'bg-emerald-500/10' : 'bg-blue-500/10'} rounded-full blur-[60px] -z-10 translate-x-1/3 -translate-y-1/3`} />
+      {status === 'pending' && (
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gold-500/5 border border-gold-500/20 rounded-2xl p-6 mb-12 flex flex-col md:flex-row gap-6 items-start md:items-center relative overflow-hidden backdrop-blur-sm"
+        >
+          <div className="absolute top-0 left-0 w-1 h-full bg-gold-500" />
+          <Clock className="w-8 h-8 text-gold-500 shrink-0" />
+          <div>
+            <h3 className="text-lg font-medium text-gold-500 mb-1">Verification in Progress</h3>
+            <p className="text-sm font-light text-gold-500/70 leading-relaxed">
+              Your payment and details have been received. Our team is manually verifying the transaction. 
+              You will receive an email and WhatsApp confirmation once approved (usually within 2-4 hours).
+            </p>
+          </div>
+        </motion.div>
+      )}
+
+      <div className="grid md:grid-cols-3 gap-8 relative z-10">
+        
+        {/* Main Content - Signals & Links */}
+        <div className="md:col-span-2 space-y-8">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-brand-gray/30 backdrop-blur-md border border-white/5 rounded-3xl p-8 relative overflow-hidden group"
+          >
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-50" />
             
-            <div className="flex flex-col h-full justify-between relative z-10">
+            <h2 className="text-2xl font-bold mb-4 font-display">Telegram Access</h2>
+            <p className="text-sm font-light text-white/50 mb-8 max-w-md leading-relaxed">
+              Real-time actionable signals are delivered exclusively via our private Telegram channel for instant execution.
+            </p>
+            <a 
+              href={status === 'active' ? 'https://t.me/thecapitalgurusupport' : '#'}
+              className={`inline-flex items-center gap-2 px-8 py-4 rounded-sm text-sm font-bold transition-all duration-300 relative overflow-hidden ${
+                status === 'active' 
+                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] hover:scale-[1.02]' 
+                  : 'bg-white/5 text-white/30 border border-white/5 cursor-not-allowed'
+              }`}
+            >
+              {status === 'active' && <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />}
+              <span className="relative flex items-center gap-2">
+                <Send className="w-4 h-4" />
+                Join The Platinum Channel
+              </span>
+            </a>
+            {status !== 'active' && (
+              <p className="text-xs font-light text-white/30 mt-4 uppercase tracking-widest">Link unlocks when subscription is active</p>
+            )}
+          </motion.div>
+
+          <div className="bg-brand-black/50 backdrop-blur-sm border border-white/5 rounded-3xl p-8">
+            <h2 className="text-xl font-bold mb-6 text-white font-display">Recent Market Updates</h2>
+            
+            <div className="space-y-4">
+              {[
+                { title: 'NIFTY Pre-Market Bias: Bullish', time: 'Today, 8:45 AM', type: 'Analysis' },
+                { title: 'BANKNIFTY 45000 CE Target Hit', time: 'Yesterday, 2:15 PM', type: 'Result' },
+              ].map((update, i) => (
+                <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-colors">
+                  <div>
+                    <span className="text-[10px] text-gold-400 font-bold tracking-widest uppercase mb-2 block">{update.type}</span>
+                    <h4 className="text-sm font-medium text-white/90">{update.title}</h4>
+                  </div>
+                  <span className="text-xs font-light text-white/40 mt-3 sm:mt-0">{update.time}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar - Educational & Profile */}
+        <div className="space-y-8">
+          <div className="bg-brand-gray/30 backdrop-blur-md border border-white/5 rounded-3xl p-8">
+            <h2 className="text-lg font-bold mb-6 text-white flex items-center gap-2 font-display">
+              <FileText className="w-5 h-5 text-gold-500" />
+              Resources
+            </h2>
+            <ul className="space-y-1">
+              {[
+                'Trader Psychology Guide',
+                'Risk Management Calculator',
+                'Educational Archive'
+              ].map((item, i) => (
+                <li key={i}>
+                  <a href="#" className="py-3 text-sm font-light text-white/50 hover:text-gold-400 flex items-center justify-between group transition-colors border-b border-white/5 last:border-0">
+                    <span>{item}</span>
+                    <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="bg-brand-black/50 backdrop-blur-sm border border-brand-border rounded-3xl p-8">
+            <h2 className="text-sm font-bold tracking-widest uppercase mb-6 text-white/80">Account Details</h2>
+            <div className="space-y-5">
               <div>
-                <h2 className="text-2xl font-space font-bold mb-3">Premium Telegram Channel</h2>
-                <p className="text-gray-400 max-w-lg mb-6">
-                  Get instant notifications for all our high-probability trades. 
-                  Access requires an active Pro or Elite subscription.
-                </p>
+                <span className="text-[10px] uppercase tracking-widest text-white/40 block mb-1">Email</span>
+                <span className="text-sm font-medium text-white/90">trader@example.com</span>
               </div>
-              
-              <div className={`flex items-center gap-4 ${activePlan ? 'bg-emerald-900/20 border-emerald-500/20' : 'bg-zinc-900 border-white/5'} border rounded-2xl p-4`}>
-                <div className={`w-12 h-12 ${activePlan ? 'bg-emerald-500/20 text-emerald-400' : 'bg-zinc-800 text-gray-400'} rounded-xl flex items-center justify-center shrink-0`}>
-                  {activePlan ? <Crown className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-white">The Capital Guru VIP</h3>
-                  <p className={`text-sm ${activePlan ? 'text-emerald-400' : 'text-gray-500'}`}>
-                    {activePlan ? 'Unlocked - Active Subscription' : 'Locked - Upgrade required'}
-                  </p>
-                </div>
-                <a 
-                  href={activePlan ? (process.env.NEXT_PUBLIC_TELEGRAM_GROUP_LINK || "https://t.me/your_telegram_channel") : "#"} 
-                  target={activePlan ? "_blank" : "_self"}
-                  rel="noreferrer"
-                  className={`px-4 py-2 rounded-lg text-sm font-medium ${activePlan ? 'bg-emerald-500 text-black hover:bg-emerald-400' : 'bg-zinc-800 text-gray-500 cursor-not-allowed'} hidden sm:flex items-center gap-2 transition-colors`}
-                >
-                  Join Channel <ExternalLink className="w-4 h-4" />
-                </a>
+              <div className="w-full h-px bg-white/5" />
+              <div>
+                <span className="text-[10px] uppercase tracking-widest text-white/40 block mb-1">Telegram ID</span>
+                <span className="text-sm font-medium text-white/90">@trader_pro</span>
+              </div>
+              <div className="w-full h-px bg-white/5" />
+              <div>
+                <span className="text-[10px] uppercase tracking-widest text-white/40 block mb-1">Plan Valid Till</span>
+                <span className="text-sm font-medium text-white/90">
+                  {status === 'active' ? 'Oct 24, 2026' : '—'}
+                </span>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </main>
-  )
+    </>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <div className="py-16 md:py-24 relative overflow-hidden min-h-screen">
+      {/* Background elements */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gold-500/5 rounded-full blur-[150px] pointer-events-none" />
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
+        <Suspense fallback={<div className="h-[60vh] flex items-center justify-center text-white/40 tracking-widest uppercase text-sm font-light">Loading portal...</div>}>
+          <DashboardContent />
+        </Suspense>
+      </div>
+    </div>
+  );
 }

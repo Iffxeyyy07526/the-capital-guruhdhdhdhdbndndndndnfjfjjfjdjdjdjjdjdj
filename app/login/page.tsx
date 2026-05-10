@@ -1,125 +1,127 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { supabase } from "@/lib/supabase"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { TrendingUp, ArrowRight, Mail, Lock, AlertCircle } from "lucide-react"
-import { Logo } from "@/components/Logo"
-import { useLoading } from "@/components/LoadingProvider"
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Mail, Lock, ArrowRight, ShieldCheck } from 'lucide-react';
+import * as motion from 'motion/react-client';
+import { toast } from 'sonner';
+
+const loginSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState<string | null>(null)
-  
-  const { setLoading, setLoadingText } = useLoading()
-  const router = useRouter()
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoadingText("Authenticating");
-    setLoading(true)
-    setError(null)
-    
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-      setError("Supabase is not configured. Please add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your .env file.")
-      setLoading(false)
-      return
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+  });
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (error) {
-      setError(error.message)
-      setLoading(false)
-    } else {
-      router.push("/dashboard")
-      router.refresh()
-      // Note: we don't setLoading(false) here, as we want to keep it showing while page transitions
-    }
-  }
+  const onSubmit = async (data: LoginFormValues) => {
+    setIsLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      document.cookie = "isLoggedIn=true; path=/; max-age=86400";
+      setIsLoading(false);
+      toast.success('Successfully logged in');
+      router.push('/dashboard');
+    }, 1500);
+  };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-black px-4 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-900/20 via-black to-black -z-10" />
+    <div className="min-h-screen pt-20 pb-12 flex flex-col justify-center relative overflow-hidden bg-brand-dark">
+      {/* Background Elements */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gold-600/5 blur-[120px] pointer-events-none" />
       
-      <div className="absolute top-8 left-8">
-        <Logo />
-      </div>
-
-      <div className="w-full max-w-md bg-zinc-950 border border-white/10 rounded-3xl p-8 shadow-2xl relative z-10">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-space font-bold mb-2">Welcome Back</h1>
-          <p className="text-gray-400">Log in to access your premium signals</p>
-        </div>
-
-        {error && (
-          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-            <p className="text-sm text-red-400 leading-relaxed">{error}</p>
+      <div className="container mx-auto px-4 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-md mx-auto"
+        >
+          <div className="text-center mb-10">
+            <h1 className="font-display text-4xl font-bold tracking-tight text-white mb-2">Welcome Back</h1>
+            <p className="text-white/50 font-light">Enter your credentials to access the portal.</p>
           </div>
-        )}
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1.5" htmlFor="email">Email</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-gray-500" />
+          <div className="bg-brand-black/80 backdrop-blur-xl border border-brand-border rounded-[2rem] p-8 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-50" />
+            
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-semibold text-white/40 uppercase tracking-widest pl-1">Email Address</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Mail className="h-5 w-5 text-white/30" />
+                  </div>
+                  <input
+                    {...register('email')}
+                    type="email"
+                    className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-gold-500/50 focus:border-gold-500/50 transition-all font-light"
+                    placeholder="investor@example.com"
+                  />
+                </div>
+                {errors.email && <p className="text-red-400 text-xs pl-1">{errors.email.message}</p>}
               </div>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full pl-10 pr-4 py-3 bg-zinc-900 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
-                placeholder="trader@example.com"
-              />
-            </div>
-          </div>
-          
-          <div>
-            <div className="flex justify-between items-center mb-1.5">
-              <label className="block text-sm font-medium text-gray-400" htmlFor="password">Password</label>
-              <Link href="#" className="text-xs text-emerald-400 hover:text-emerald-300">Forgot password?</Link>
-            </div>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-gray-500" />
+
+              <div className="space-y-2">
+                <div className="flex justify-between items-center pl-1">
+                  <label className="text-[10px] font-semibold text-white/40 uppercase tracking-widest">Password</label>
+                  <Link href="/forgot-password" className="text-[11px] text-gold-400 hover:text-gold-300 transition-colors">Forgot Password?</Link>
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-white/30" />
+                  </div>
+                  <input
+                    {...register('password')}
+                    type="password"
+                    className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-gold-500/50 focus:border-gold-500/50 transition-all font-light"
+                    placeholder="••••••••"
+                  />
+                </div>
+                {errors.password && <p className="text-red-400 text-xs pl-1">{errors.password.message}</p>}
               </div>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full pl-10 pr-4 py-3 bg-zinc-900 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
-                placeholder="••••••••"
-              />
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full h-14 rounded-xl bg-gradient-to-r from-gold-400 via-gold-500 to-gold-600 text-brand-black font-bold text-lg hover:shadow-[0_0_30px_rgba(212,175,55,0.3)] transition-all flex justify-center items-center gap-3 relative overflow-hidden group disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+              >
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                <span className="relative flex items-center gap-2">
+                  {isLoading ? 'Authenticating...' : 'Sign In'}
+                  {!isLoading && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
+                </span>
+              </button>
+            </form>
+
+            <div className="mt-8 pt-6 border-t border-white/5 text-center px-4">
+              <p className="text-sm text-white/50 font-light flex items-center gap-1.5 justify-center mb-4">
+                <ShieldCheck className="w-4 h-4 text-gold-500/70" /> Enterprise Grade Encryption
+              </p>
+              <p className="text-sm text-white/40 mb-2">By continuing, you agree to our <Link href="/terms" className="text-white/70 hover:text-white">Terms of Service</Link> and <Link href="/privacy" className="text-white/70 hover:text-white">Privacy Policy</Link>.</p>
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="w-full py-3 px-4 bg-emerald-500 text-black rounded-xl font-bold hover:bg-emerald-400 transition-colors flex items-center justify-center gap-2 mt-6 group"
-          >
-            Sign In
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
-        </form>
-
-        <p className="mt-8 text-center text-sm text-gray-400">
-          Don't have an account?{" "}
-          <Link href="/register" className="text-emerald-400 hover:text-emerald-300 font-medium pb-0.5 border-b border-emerald-400/30 hover:border-emerald-300">
-            Create account
-          </Link>
-        </p>
+          <p className="text-center mt-8 text-white/50 font-light">
+            Don&apos;t have an account? <Link href="/register" className="text-gold-400 hover:text-gold-300 font-medium ml-1">Create Account</Link>
+          </p>
+        </motion.div>
       </div>
-    </main>
-  )
+    </div>
+  );
 }

@@ -1,107 +1,88 @@
-"use client";
+import { BookOpen, Calendar, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
-import { motion } from "motion/react";
-import Image from "next/image";
-import Link from "next/link";
-import { AppNavbar } from "@/components/AppNavbar";
-import { AppFooter } from "@/components/AppFooter";
-import { ArrowRight, Calendar, User, Search } from "lucide-react";
-import { getAllBlogs } from "@/lib/blogs";
+const BLOG_POSTS = [
+  { title: "Understanding the Mechanics of Nifty Weekly Expiries", category: "Options", date: "May 10, 2026", excerpt: "Weekly expiries have fundamentally changed the liquidity landscape of the Nifty 50. Discover how to navigate gamma spikes." },
+  { title: "Price Action vs Indicators: Finding Your Edge", category: "Technical", date: "May 09, 2026", excerpt: "Why pure price action often beats lagging indicators in high-frequency volatile markets." },
+  { title: "The Psychology of Handling Consecutive Stop Losses", category: "Psychology", date: "May 08, 2026", excerpt: "Losing streaks are inevitable. How institutional traders maintain composure and protect their capital." },
+  { title: "Decoding BankNifty Volatility Index (VIX)", category: "Options", date: "May 07, 2026", excerpt: "How to interpret the Indian VIX to adjust your position sizing effectively." },
+  { title: "Iron Condors in a Sideways Market", category: "Strategies", date: "May 06, 2026", excerpt: "A deep dive into constructing Delta-neutral strategies when indices refuse to trend." },
+  { title: "The Importance of Pre-Market Analysis", category: "Preparation", date: "May 05, 2026", excerpt: "How to read global cues and SGX Nifty to form a robust thesis before the 9:15 AM bell." },
+  { title: "Why Retail Traders Fail at Options Buying", category: "Analysis", date: "May 04, 2026", excerpt: "Exploring Theta decay and the fundamental mathematical disadvantage of buying OTM options." },
+  { title: "Risk Management: The 1% Rule", category: "Risk", date: "May 03, 2026", excerpt: "Why risking more than 1% of your account per trade is a mathematical suicide mission." },
+  { title: "Identifying Institutional Support and Resistance", category: "Technical", date: "May 02, 2026", excerpt: "How to spot smart money footprints using volume profiles and order block theory." },
+  { title: "Mastering the Breakout Trade", category: "Strategies", date: "May 01, 2026", excerpt: "Differentiating between genuine technical breakouts and liquidity grabs (fakeouts)." },
+  { title: "The Role of Global Markets on Indian Indices", category: "Macro", date: "Apr 30, 2026", excerpt: "How US inflation data and Fed rate hikes impact Nifty and BankNifty." },
+  { title: "Options Selling: Collecting Premium Like a Casino", category: "Strategies", date: "Apr 29, 2026", excerpt: "Understanding the high win-rate, undefined risk world of shorting options." },
+  { title: "How to Keep a Professional Trading Journal", category: "Preparation", date: "Apr 28, 2026", excerpt: "Tracking emotions, mistakes, and metrics to continuously refine your edge." },
+  { title: "Using Fibonacci Retracements Effectively", category: "Technical", date: "Apr 27, 2026", excerpt: "The golden ratio in financial markets: Myths, realities, and practical applications." },
+  { title: "Understanding Option Greeks: Delta, Gamma, Theta, Vega", category: "Options", date: "Apr 26, 2026", excerpt: "The four fundamental variables that determine the pricing of every options contract." },
+  { title: "Sector Rotation: Finding the Next Mover", category: "Analysis", date: "Apr 25, 2026", excerpt: "How money flows between IT, Banking, Auto, and Pharma sectors during market cycles." },
+  { title: "The Deadly Sin of Revenge Trading", category: "Psychology", date: "Apr 24, 2026", excerpt: "How the desire to 'win back' losses destroys more accounts than poor strategy." },
+  { title: "Algorithmic Trading: The Future of Retail?", category: "Tech", date: "Apr 23, 2026", excerpt: "Demystifying algos and how retail traders can leverage basic automation." },
+  { title: "Trading the First 15 Minutes: Opening Range Breakout", category: "Strategies", date: "Apr 22, 2026", excerpt: "The high-risk, high-reward environment of the morning AM session." },
+  { title: "Understanding the Put-Call Ratio (PCR)", category: "Options", date: "Apr 21, 2026", excerpt: "Using the PCR as a contrarian indicator to spot market tops and bottoms." },
+  { title: "Handling Gap-Ups and Gap-Downs", category: "Strategies", date: "Apr 20, 2026", excerpt: "Do gaps always fill? How to structure a trade when the market opens with a massive gap." },
+  { title: "The Myth of the Holy Grail Indicator", category: "Psychology", date: "Apr 19, 2026", excerpt: "Why constantly switching trading systems guarantees long-term failure." },
+  { title: "Building a Watchlist Like a Pro", category: "Preparation", date: "Apr 18, 2026", excerpt: "Filtering out the noise and selecting the top 5 relative strength stocks to trade." },
+  { title: "What is Open Interest (OI) Analysis?", category: "Options", date: "Apr 17, 2026", excerpt: "Tracking where the big option writers are defending their strikes." },
+  { title: "The Impact of Corporate Earnings on Price Action", category: "Fundamental", date: "Apr 16, 2026", excerpt: "Trading the volatility crush around quarterly result announcements." },
+  { title: "Understanding Margin Requirements in F&O", category: "Account", date: "Apr 15, 2026", excerpt: "How SEBI's margin rules dictate your position sizing and leverage." },
+  { title: "Scaling Up: Moving from 1 Lot to 10 Lots", category: "Psychology", date: "Apr 14, 2026", excerpt: "Overcoming the mental block of handling larger position sizes." },
+  { title: "The Truth About Trading Gurus", category: "Industry", date: "Apr 13, 2026", excerpt: "How to differentiate between genuine educators and marketers selling dreams." },
+  { title: "Trading the End of Day (EOD) Spike", category: "Strategies", date: "Apr 12, 2026", excerpt: "Capitalizing on the 2:30 PM to 3:30 PM institutional rebalancing." },
+  { title: "Why Routine is Your Ultimate Edge", category: "Preparation", date: "Apr 11, 2026", excerpt: "How establishing strict daily habits builds the discipline required for profitable trading." }
+];
 
 export default function BlogsPage() {
-  const blogs = getAllBlogs();
-
   return (
-    <div className="flex flex-col min-h-screen bg-black text-white">
-      <AppNavbar />
+    <div className="min-h-screen bg-brand-dark pt-24 pb-20 relative overflow-hidden">
+      <div className="absolute top-0 right-[10%] w-[600px] h-[600px] bg-gold-600/5 blur-[120px] pointer-events-none rounded-full" />
       
-      <main className="flex-1 relative pb-24">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-900/20 via-black to-black -z-10" />
-        
-        {/* Header Section */}
-        <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-5xl md:text-7xl font-space font-bold tracking-tight mb-8"
-          >
-            Market <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Insights</span>
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed mb-12"
-          >
-            Enhance your trading knowledge with 25+ in-depth guides on Nifty, BankNifty, Options Strategies, and Trading Psychology.
-          </motion.p>
-          
-          <motion.div 
-             initial={{ opacity: 0, y: 20 }}
-             animate={{ opacity: 1, y: 0 }}
-             transition={{ duration: 0.5, delay: 0.2 }}
-             className="relative max-w-xl mx-auto"
-          >
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input 
-              type="text" 
-              placeholder="Search guides, strategies, psychology..."
-              className="w-full bg-zinc-900 border border-white/10 rounded-full py-4 pl-12 pr-6 focus:outline-none focus:border-emerald-500/50 text-white placeholder:text-gray-500 transition-colors"
-            />
-          </motion.div>
-        </section>
+      <div className="container mx-auto px-4 max-w-7xl relative z-10">
+        <div className="text-center mb-16 max-w-3xl mx-auto">
+          <span className="text-gold-500 uppercase tracking-widest text-xs font-bold mb-4 block">Market Insights</span>
+          <h1 className="font-display text-4xl md:text-5xl font-bold mb-6 text-white tracking-tight">The 1% Knowledge Hub</h1>
+          <p className="text-white/60 font-light text-lg">
+            Master the intricacies of price action, risk management, and trading psychology with our deep-dive articles.
+          </p>
+        </div>
 
-        {/* Blog Grid */}
-        <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs.map((blog, i) => (
-              <motion.article 
-                key={blog.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.4, delay: (i % 3) * 0.1 }}
-                className="group flex flex-col bg-zinc-950/80 backdrop-blur-sm border border-white/5 rounded-3xl overflow-hidden hover:border-emerald-500/30 transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.05)]"
-              >
-                <div className="relative h-56 overflow-hidden">
-                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors duration-500 z-10" />
-                  <Image 
-                    src={blog.image} 
-                    alt={blog.title} 
-                    fill 
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute top-4 left-4 z-20 bg-emerald-500/90 backdrop-blur-md text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                    {blog.category}
-                  </div>
-                </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
-                    <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {blog.date}</span>
-                    <span className="flex items-center gap-1.5"><User className="w-3.5 h-3.5" /> {blog.author}</span>
-                  </div>
-                  <h2 className="text-xl font-bold mb-3 group-hover:text-emerald-400 transition-colors line-clamp-2">
-                    {blog.title}
-                  </h2>
-                  <p className="text-sm text-gray-400 leading-relaxed mb-6 flex-1 line-clamp-3">
-                    {blog.excerpt}
-                  </p>
-                  <Link 
-                    href={`/blogs/${blog.id}`} 
-                    className="mt-auto inline-flex items-center gap-2 text-emerald-400 text-sm font-semibold hover:text-emerald-300 transition-colors w-fit"
-                  >
-                    Read Article <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-        </section>
-      </main>
-
-      <AppFooter />
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {BLOG_POSTS.map((post, i) => (
+            <div key={i} className="bg-brand-black/50 border border-white/5 rounded-2xl p-6 hover:bg-white/[0.02] hover:border-gold-500/20 transition-all group flex flex-col h-full">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[10px] uppercase tracking-widest font-bold text-gold-500 bg-gold-500/10 px-3 py-1 rounded-full">
+                  {post.category}
+                </span>
+                <span className="text-xs text-white/40 flex items-center gap-1.5 font-light">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {post.date}
+                </span>
+              </div>
+              
+              <h3 className="text-xl font-bold text-white mb-3 font-display group-hover:text-gold-400 transition-colors">
+                {post.title}
+              </h3>
+              
+              <p className="text-sm text-white/50 font-light leading-relaxed mb-6 flex-grow">
+                {post.excerpt}
+              </p>
+              
+              <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
+                <span className="text-xs font-medium text-white/70 flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-gold-500/70" />
+                  5 min read
+                </span>
+                
+                <button className="text-gold-400 hover:text-gold-300 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
+                  Read Article <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
