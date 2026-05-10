@@ -1,7 +1,9 @@
 import { BookOpen, Calendar, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import * as motion from 'motion/react-client';
 
 const BLOG_POSTS = [
+// ... existing BLOG_POSTS (I will keep them but use multi_edit or just replace the component part)
   { title: "Understanding the Mechanics of Nifty Weekly Expiries", category: "Options", date: "May 10, 2026", excerpt: "Weekly expiries have fundamentally changed the liquidity landscape of the Nifty 50. Discover how to navigate gamma spikes." },
   { title: "Price Action vs Indicators: Finding Your Edge", category: "Technical", date: "May 09, 2026", excerpt: "Why pure price action often beats lagging indicators in high-frequency volatile markets." },
   { title: "The Psychology of Handling Consecutive Stop Losses", category: "Psychology", date: "May 08, 2026", excerpt: "Losing streaks are inevitable. How institutional traders maintain composure and protect their capital." },
@@ -50,7 +52,14 @@ export default function BlogsPage() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {BLOG_POSTS.map((post, i) => (
-            <div key={i} className="bg-brand-black/50 border border-white/5 rounded-2xl p-6 hover:bg-white/[0.02] hover:border-gold-500/20 transition-all group flex flex-col h-full">
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ delay: i * 0.05, duration: 0.5 }}
+              className="bg-brand-black/50 border border-white/5 rounded-2xl p-6 hover:bg-white/[0.02] hover:border-gold-500/20 transition-all group flex flex-col h-full"
+            >
               <div className="flex items-center justify-between mb-4">
                 <span className="text-[10px] uppercase tracking-widest font-bold text-gold-500 bg-gold-500/10 px-3 py-1 rounded-full">
                   {post.category}
@@ -79,7 +88,7 @@ export default function BlogsPage() {
                   Read Article <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

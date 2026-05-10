@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { motion } from 'motion/react';
+import { Logo } from './logo';
 
 const navLinks = [
   { name: 'Home', href: '/' },
@@ -18,12 +19,10 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-brand-border bg-brand-black/70 backdrop-blur-xl supports-[backdrop-filter]:bg-brand-black/60">
+    <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-brand-black/70 backdrop-blur-xl supports-[backdrop-filter]:bg-brand-black/60">
       <div className="container mx-auto px-4 max-w-7xl h-20 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 group">
-          <span className="font-display font-bold text-xl tracking-tight text-white transition-opacity group-hover:opacity-80">
-            THE CAPITAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">GURU</span>
-          </span>
+        <Link href="/" className="group">
+          <Logo size="md" />
         </Link>
         
         <nav className="hidden md:flex items-center gap-8">

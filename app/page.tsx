@@ -29,25 +29,47 @@ export default function Home() {
         
         <div className="container mx-auto max-w-7xl relative z-10 grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: { staggerChildren: 0.2 }
+              }
+            }}
             className="flex flex-col items-center lg:items-start text-center lg:text-left pt-10"
           >
-            <div className="inline-flex items-center rounded-full border border-gold-500/20 bg-gold-500/10 px-4 py-1.5 text-xs font-bold text-gold-400 mb-8 backdrop-blur-md uppercase tracking-widest shadow-[0_0_30px_rgba(212,175,55,0.1)]">
+            <motion.div 
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center rounded-full border border-gold-500/20 bg-gold-500/10 px-4 py-1.5 text-xs font-bold text-gold-400 mb-8 backdrop-blur-md uppercase tracking-widest shadow-[0_0_30px_rgba(212,175,55,0.1)]"
+            >
               <Zap className="mr-2 h-3.5 w-3.5 fill-gold-400" /> NSE/BSE Futures & Options
-            </div>
+            </motion.div>
             
-            <h1 className="font-display text-5xl sm:text-6xl md:text-8xl font-bold tracking-tighter mb-8 leading-[1.05] text-white">
+            <motion.h1 
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="font-display text-5xl sm:text-6xl md:text-8xl font-bold tracking-tighter mb-8 leading-[1.05] text-white"
+            >
               The Edge For <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-400 to-gold-600 drop-shadow-sm">The Top 1%</span>
-            </h1>
+            </motion.h1>
             
-            <p className="text-lg md:text-xl text-white/60 mb-12 max-w-xl leading-relaxed font-light">
+            <motion.p 
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+              transition={{ duration: 0.6 }}
+              className="text-lg md:text-xl text-white/60 mb-12 max-w-xl leading-relaxed font-light"
+            >
               We decode market structure to deliver institutional-grade signals. Maximize profits and preserve capital with our systematic approach to the Indian derivatives market.
-            </p>
+            </motion.p>
             
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5 w-full sm:w-auto">
+            <motion.div 
+              variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5 w-full sm:w-auto"
+            >
               <Link
                 href="/pricing"
                 className="group w-full sm:w-auto h-14 inline-flex items-center justify-center rounded-sm bg-gradient-to-r from-gold-400 via-gold-500 to-gold-600 px-10 text-sm font-bold text-brand-black shadow-[0_0_40px_rgba(212,175,55,0.3)] hover:shadow-[0_0_60px_rgba(212,175,55,0.5)] transition-all overflow-hidden relative"
@@ -64,7 +86,7 @@ export default function Home() {
               >
                 Discover Our Edge
               </Link>
-            </div>
+            </motion.div>
           </motion.div>
 
           <motion.div 

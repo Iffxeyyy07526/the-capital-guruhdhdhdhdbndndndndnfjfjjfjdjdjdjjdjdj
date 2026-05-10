@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from 'sonner';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
+import { PageTransition } from '@/components/page-transition';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -25,7 +26,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} dark`}>
       <body className="bg-brand-black text-white min-h-screen flex flex-col font-sans" suppressHydrationWarning>
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <PageTransition>{children}</PageTransition>
         <Footer />
         <Toaster theme="dark" richColors position="top-right" />
       </body>

@@ -102,7 +102,18 @@ export function TelegramPhone() {
   }, []);
 
   return (
-    <div className="relative mx-auto w-[320px] h-[650px] bg-[#0E1621] rounded-[3.5rem] border-[10px] border-[#1a1a1a] shadow-[0_0_60px_rgba(212,175,55,0.15)] overflow-hidden flex flex-col font-sans transform rotate-[-2deg] hover:rotate-0 transition-transform duration-700 ease-out z-20">
+    <motion.div 
+      animate={{ 
+        y: [0, -15, 0],
+        rotate: [-2, -1, -2]
+      }}
+      transition={{ 
+        duration: 6, 
+        repeat: Infinity, 
+        ease: "easeInOut" 
+      }}
+      className="relative mx-auto w-[320px] h-[650px] bg-[#0E1621] rounded-[3.5rem] border-[10px] border-[#1a1a1a] shadow-[0_0_60px_rgba(212,175,55,0.15)] overflow-hidden flex flex-col font-sans z-20"
+    >
       
       {/* Hardware Accents */}
       <div className="absolute top-0 inset-x-0 h-7 bg-[#1a1a1a] rounded-b-3xl w-[140px] mx-auto z-30 flex items-center justify-center gap-2">
@@ -245,6 +256,6 @@ export function TelegramPhone() {
         <div className="w-8 h-8 rounded-full bg-gold-600/50 flex items-center justify-center blur-[1px]"></div>
       </div>
       
-    </div>
+    </motion.div>
   );
 }

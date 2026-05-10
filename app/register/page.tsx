@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { User, Mail, Phone, Lock, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import * as motion from 'motion/react-client';
 import { toast } from 'sonner';
+import { Logo } from '@/components/logo';
 
 const registerSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name is required' }),
@@ -57,6 +58,12 @@ export default function RegisterPage() {
             transition={{ duration: 0.6 }}
             className="hidden lg:block pr-8"
           >
+            <div className="flex items-center gap-4 mb-8">
+              <Link href="/">
+                <Logo variant="monogram" size="lg" />
+              </Link>
+            </div>
+            
             <div className="inline-flex items-center rounded-full border border-gold-500/20 bg-gold-500/10 px-4 py-1.5 text-[10px] font-bold text-gold-400 mb-6 uppercase tracking-widest shadow-[0_0_20px_rgba(212,175,55,0.05)]">
                Exclusive Access
             </div>
@@ -93,7 +100,12 @@ export default function RegisterPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="relative"
           >
-            <div className="lg:hidden text-center mb-8">
+            <div className="lg:hidden flex flex-col items-center mb-10">
+               <div className="mb-8">
+                 <Link href="/">
+                   <Logo variant="monogram" size="lg" />
+                 </Link>
+               </div>
                <h1 className="font-display text-4xl font-bold text-white mb-2">Create Account</h1>
                <p className="text-white/50 text-sm">Join the top 1% standard of trading.</p>
             </div>

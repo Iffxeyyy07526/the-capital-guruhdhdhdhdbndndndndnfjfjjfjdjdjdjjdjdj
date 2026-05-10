@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Mail, Send, Instagram, Phone } from 'lucide-react';
+import { Logo } from './logo';
 
 export function Footer() {
   return (
@@ -10,9 +11,9 @@ export function Footer() {
       <div className="container mx-auto px-4 max-w-7xl py-16 md:py-20 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-16">
           <div className="md:col-span-2">
-            <span className="font-display font-bold text-xl tracking-tight text-white mb-6 block">
-              THE CAPITAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">GURU</span>
-            </span>
+            <Link href="/" className="mb-6 block group">
+              <Logo size="md" />
+            </Link>
             <p className="text-sm text-white/50 max-w-md mb-8 font-light leading-relaxed">
               Premium trading signals for the Indian market. Precision entries, expertly managed risk, and consistent growth for the serious trader.
             </p>

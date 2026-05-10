@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Mail, Lock, ArrowRight, ShieldCheck } from 'lucide-react';
 import * as motion from 'motion/react-client';
 import { toast } from 'sonner';
+import { Logo } from '@/components/logo';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
@@ -52,6 +53,12 @@ export default function LoginPage() {
           transition={{ duration: 0.5 }}
           className="max-w-md mx-auto"
         >
+          <div className="flex justify-center mb-8">
+            <Link href="/">
+              <Logo variant="monogram" size="lg" />
+            </Link>
+          </div>
+          
           <div className="text-center mb-10">
             <h1 className="font-display text-4xl font-bold tracking-tight text-white mb-2">Welcome Back</h1>
             <p className="text-white/50 font-light">Enter your credentials to access the portal.</p>
