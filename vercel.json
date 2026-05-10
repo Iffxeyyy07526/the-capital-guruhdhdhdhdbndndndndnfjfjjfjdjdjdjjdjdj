@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/send-emails?type=educational",
+      "schedule": "0 10 * * 2"
+    },
+    {
+      "path": "/api/cron/send-emails?type=sales",
+      "schedule": "0 10 * * 4"
+    }
+  ]
+}

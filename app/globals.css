@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-space: var(--font-space);
+  --font-inter: var(--font-inter);
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+  }
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+}
+
+@layer components {
+  .markdown-body {
+    @apply w-full max-w-none text-gray-300 leading-relaxed text-lg;
+  }
+  .markdown-body h2 {
+    @apply text-3xl font-bold tracking-tight text-white mt-12 mb-6;
+    font-family: var(--font-space, inherit);
+  }
+  .markdown-body h3 {
+    @apply text-2xl font-bold tracking-tight text-white mt-8 mb-4;
+    font-family: var(--font-space, inherit);
+  }
+  .markdown-body p {
+    @apply mb-6;
+  }
+  .markdown-body a {
+    @apply text-emerald-400 no-underline hover:underline;
+  }
+  .markdown-body strong {
+    @apply text-white font-semibold;
+  }
+  .markdown-body ul {
+    @apply my-6 list-disc list-outside pl-6;
+  }
+  .markdown-body ol {
+    @apply my-6 list-decimal list-outside pl-6;
+  }
+  .markdown-body li {
+    @apply mb-2;
+  }
+  .markdown-body blockquote {
+    @apply border-l-4 border-emerald-500 bg-emerald-500/5 px-6 py-4 rounded-r-lg text-gray-200 not-italic my-8;
+  }
+}
